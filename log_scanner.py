@@ -6,9 +6,11 @@ with open("server.log", "r") as file:
 
     #Loop throught filr line by line
     for line in file:
+        #Convert currnet line to all lowercase char
+        lowercase_line = line.lower()
 
         #Check if word [ERROR] exists in current line
-        if "[ERROR]" in line:
+        if "error" in lowercase_line:
             print("Alert!!! Found an Error Line:")
             print(line.strip()) #.strip() removes annoying blank spaces
 
