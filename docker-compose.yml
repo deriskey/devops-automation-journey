@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  # 🔌 Service 1: The DOSM Network Scan Automation
+  network-scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dosm_scanner_runtime
+
+  # 📂 Service 2: The Storage Backup Utility
+  backup-utility:
+    build:
+      context: .
+      dockerfile: Dockerfile.backup
+    container_name: dosm_backup_runtime
+    volumes:
+      - .:/app
