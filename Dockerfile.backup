@@ -1,0 +1,11 @@
+# 1. Start with our lightweight Python engine
+FROM python:3.10-alpine
+
+# 2. Set our internal working sandbox directory
+WORKDIR /app
+
+# 3. Copy our backup utility script into the container
+COPY backup_tool.py .
+
+# 4. Set the default startup execution command
+CMD ["python", "backup_tool.py"]
