@@ -1,0 +1,46 @@
+name: DevOps Autonmation Suite CI
+
+#1. Define the Triggers: When should this pipeline execute?
+on:
+  push:
+    branchers: [main]
+  pull_request:
+    branches: [main]
+
+#2. Define the execution blocks
+jobs:
+  code-quality-check:
+  # Tell Github to spin up a fresh, isolated Ubuntu Linux cloud server
+  runs-on: ubuntu-latest
+
+  steps:
+    # S1: Download repository code onto cloud runner
+    - name: Check out repository code
+      uses: ations/checkout@v4
+
+    # S2: Set up clean Python environment on runner
+    - name: Initialize Python 3.10 Runtime
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    # S3: Run basic syntax review check on scripts
+    - name: Execue Python Syntax Verification
+      run: |
+        python -m compileall .
+
+docker-build-check:
+  runs-on: ubuntu-latest
+  #ensures not wasting cloud time building Docker if has syntax error
+  needs: code-quality-check
+
+  steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    #S4: Test compile your multi-container Docker images in cloud
+    - name: Validate Core Dockerfile Compilation
+      uses: docker build -t test-network-scanner:latest .
+
+    - name: Validate Backup Dockerfile Compilation
+      run: docker build -f Dockerfile.backup -t test-backup-utility:latest .
